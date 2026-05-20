@@ -52,24 +52,27 @@ df["ClubJP"] = df["ClubJP"].fillna(df["current_club_name"])
 df["NameJP"] = df["name"].replace(player_jp)
 df["NameJP"] = df["NameJP"].fillna(df["name"])
 
-# 架空選手追加
-new_player = pd.DataFrame([{
-    "name": "Awaji Taku",
-    "current_club_name": "Real Madrid",
-    "position": "Attack",
-    "date_of_birth": "2005-01-01",
-    "market_value_in_eur": 999999999,
-    "highest_market_value_in_eur": 999999999,
-    "ClubJP": "レアル・マドリード",
-    "NameJP": "淡路卓"
-}])
-
 df = pd.concat([df, new_player], ignore_index=True)
 
 # 年齢計算
 df["date_of_birth"] = pd.to_datetime(df["date_of_birth"], errors="coerce")
 df = df.dropna(subset=["date_of_birth"])
 df["Age"] = 2026 - df["date_of_birth"].dt.year
+
+# 架空選手追加
+new_player = pd.DataFrame([{
+    "name": "Awaji Taku",
+    "current_club_name": "Real Madrid",
+    "position": "Attack",
+    "date_of_birth": pd.Timestamp("2008-01-01"),
+    "market_value_in_eur": 999999999,
+    "highest_market_value_in_eur": 999999999,
+    "ClubJP": "レアル・マドリード",
+    "NameJP": "淡路卓",
+    "Age": 18
+}])
+
+df = pd.concat([df, new_player], ignore_index=True)
 
 # ポジション数値化
 position_map = {
