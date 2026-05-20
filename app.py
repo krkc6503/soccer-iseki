@@ -52,8 +52,6 @@ df["ClubJP"] = df["ClubJP"].fillna(df["current_club_name"])
 df["NameJP"] = df["name"].replace(player_jp)
 df["NameJP"] = df["NameJP"].fillna(df["name"])
 
-df = pd.concat([df, new_player], ignore_index=True)
-
 # 年齢計算
 df["date_of_birth"] = pd.to_datetime(df["date_of_birth"], errors="coerce")
 df = df.dropna(subset=["date_of_birth"])
