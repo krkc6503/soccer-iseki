@@ -84,50 +84,43 @@ if mode == "実在選手":
         club_df["name"].str.contains(search_name, case=False, na=False)
     ]
 
-    player = st.selectbox("選手を選択", filtered_players["NameJP"])
-    selected = filtered_players[filtered_players["NameJP"] == player].iloc[0]
+    if len(filtered_players) == 0:
+        st.warning("該当する選手がいません")
+    else:
+        player = st.selectbox("選手を選択", filtered_players["NameJP"])
+        selected = filtered_players[filtered_players["NameJP"] == player].iloc[0]
 
-    st.subheader("選手データ")
-    st.dataframe(selected.to_frame().T)
-    club_df["NameJP"].str.contains(search_name, case=False, na=False) |
-    club_df["name"].str.contains(search_name, case=False, na=False)
-]
+        st.subheader("選手データ")
+        st.dataframe(selected.to_frame().T)
 
-player = st.selectbox("選手を選択", filtered_players["NameJP"])
-selected = filtered_players[filtered_players["NameJP"] == player].iloc[0]
+        pred = model.predict([[selected["Age"], selected["PositionNum"]]])
+        st.subheader("予測市場価値")
+        st.write(f"{pred[0]:,.0f} €")
 
-    st.subheader("選手データ")
-    st.dataframe(selected.to_frame().T)
+        # レーダーチャート
+        labels = ["Age", "Current", "Highest", "Position"]
 
-    pred = model.predict([[selected["Age"], selected["PositionNum"]]])
-    st.subheader("予測市場価値")
-    st.write(f"{pred[0]:,.0f} €")
+        values = [
+            selected["Age"] / df["Age"].max() * 100,
+            selected["market_value_in_eur"] / df["market_value_in_eur"].max() * 100,
+            selected["highest_market_value_in_eur"] / df["highest_market_value_in_eur"].max() * 100,
+            selected["PositionNum"] / 4 * 100
+        ]
 
-    # レーダーチャート
-    labels = ["Age", "Current", "Highest", "Position"]
+        values += values[:1]
+        angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False).tolist()
+        angles += angles[:1]
 
-    values = [
-        selected["Age"] / df["Age"].max() * 100,
-        selected["market_value_in_eur"] / df["market_value_in_eur"].max() * 100,
-        selected["highest_market_value_in_eur"] / df["highest_market_value_in_eur"].max() * 100,
-        selected["PositionNum"] / 4 * 100
-    ]
+        fig, ax = plt.subplots(figsize=(6,6), subplot_kw=dict(polar=True))
+        ax.plot(angles, values, linewidth=2)
+        ax.fill(angles, values, alpha=0.25)
 
-    values += values[:1]
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(labels, fontsize=12)
+        ax.set_ylim(0, 100)
 
-    angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False).tolist()
-    angles += angles[:1]
-
-    fig, ax = plt.subplots(figsize=(6,6), subplot_kw=dict(polar=True))
-    ax.plot(angles, values, linewidth=2)
-    ax.fill(angles, values, alpha=0.25)
-
-    ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(labels, fontsize=12)
-    ax.set_ylim(0, 100)
-
-    st.subheader("選手能力レーダーチャート")
-    st.pyplot(fig)
+        st.subheader("選手能力レーダーチャート")
+        st.pyplot(fig)
 
 else:
     age = st.slider("年齢", 16, 40, 22)
