@@ -32,7 +32,7 @@ df["NameJP"] = df["name"].replace(player_jp).fillna(df["name"])
 df["ClubJP"] = df["current_club_name"].replace(club_jp).fillna(df["current_club_name"])
 
 new_player = pd.DataFrame([{
-    "name": "Awaji Suguru",
+    "name": "Awaji Taku",
     "current_club_name": "Real Madrid",
     "position": "Attack",
     "date_of_birth": pd.Timestamp("2008-01-01"),
@@ -40,9 +40,8 @@ new_player = pd.DataFrame([{
     "highest_market_value_in_eur": 999999999,
     "NameJP": "淡路卓",
     "ClubJP": "レアル・マドリード",
-    "Age": 36
+    "Age": 18
 }])
-df = pd.concat([df, new_player], ignore_index=True)
 
 position_map = {"Goalkeeper": 1, "Defender": 2, "Midfield": 3, "Attack": 4}
 df["PositionNum"] = df["position"].map(position_map).fillna(3)
@@ -55,10 +54,16 @@ model.fit(X, y)
 mode = st.radio("選択", ["実在選手", "自分で入力"])
 
 if mode == "実在選手":
+    show_awaji = st.toggle("フェンシング選手をオンにする")
+    if show_awaji:
+        work_df = pd.concat([df, new_player], ignore_index=True)
+    else:
+        work_df = df.copy()
+
     search_name = st.text_input("選手名を入力（日本語・英語OK）")
-    filtered_players = df[
-        df["NameJP"].str.contains(search_name, case=False, na=False) |
-        df["name"].str.contains(search_name, case=False, na=False)
+    filtered_players = work_df[
+        work_df["NameJP"].str.contains(search_name, case=False, na=False) |
+        work_df["name"].str.contains(search_name, case=False, na=False)
     ]
 
     if len(filtered_players) == 0:
@@ -77,9 +82,9 @@ if mode == "実在選手":
 
         labels = ["Age", "Current Value", "Highest Value", "Position"]
         values = [
-            selected["Age"] / df["Age"].max() * 100,
-            selected["market_value_in_eur"] / df["market_value_in_eur"].max() * 100,
-            selected["highest_market_value_in_eur"] / df["highest_market_value_in_eur"].max() * 100,
+            selected["Age"] / work_df["Age"].max() * 100,
+            selected["market_value_in_eur"] / work_df["market_value_in_eur"].max() * 100,
+            selected["highest_market_value_in_eur"] / work_df["highest_market_value_in_eur"].max() * 100,
             selected["PositionNum"] / 4 * 100,
         ]
         values += values[:1]
@@ -96,7 +101,7 @@ if mode == "実在選手":
         st.pyplot(fig)
 
         st.subheader("Top 10 Market Value")
-        top10 = df.sort_values("market_value_in_eur", ascending=False).head(10)
+        top10 = work_df.sort_values("market_value_in_eur", ascending=False).head(10)
         fig2, ax2 = plt.subplots(figsize=(10, 5))
         ax2.barh(top10["name"], top10["market_value_in_eur"] / 1000000)
         ax2.invert_yaxis()
