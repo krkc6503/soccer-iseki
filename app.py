@@ -139,19 +139,21 @@ if mode == "実在選手":
         ax.set_ylim(0, 100)
 
         st.subheader("選手能力レーダーチャート")
+        st.subheader("選手能力レーダーチャート")
         st.pyplot(fig)
-# 市場価値トップ10
-st.subheader("市場価値ランキング TOP10")
 
-top10 = df.sort_values("market_value_in_eur", ascending=False).head(10)
+        # 市場価値トップ10
+        st.subheader("市場価値ランキング TOP10")
 
-fig2, ax2 = plt.subplots(figsize=(10, 5))
-ax2.barh(top10["NameJP"], top10["market_value_in_eur"] / 1000000)
-ax2.invert_yaxis()
-ax2.set_xlabel("市場価値 (百万ユーロ)")
-ax2.set_ylabel("選手名")
+        top10 = df.sort_values("market_value_in_eur", ascending=False).head(10)
 
-st.pyplot(fig2)
+        fig2, ax2 = plt.subplots(figsize=(10, 5))
+        ax2.barh(top10["NameJP"], top10["market_value_in_eur"] / 1000000)
+        ax2.invert_yaxis()
+        ax2.set_xlabel("市場価値 (百万ユーロ)")
+        ax2.set_ylabel("選手名")
+
+        st.pyplot(fig2)
 
 else:
     age = st.slider("年齢", 16, 40, 22)
