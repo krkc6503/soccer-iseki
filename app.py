@@ -140,7 +140,6 @@ if mode == "実在選手":
 
         st.subheader("選手能力レーダーチャート")
         st.pyplot(fig)
-
 # 市場価値トップ10
 st.subheader("市場価値ランキング TOP10")
 
