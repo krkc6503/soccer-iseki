@@ -32,7 +32,7 @@ df["NameJP"] = df["name"].replace(player_jp).fillna(df["name"])
 df["ClubJP"] = df["current_club_name"].replace(club_jp).fillna(df["current_club_name"])
 
 new_player = pd.DataFrame([{
-    "name": "Awaji Taku",
+    "name": "Awaji Suguru",
     "current_club_name": "Real Madrid",
     "position": "Attack",
     "date_of_birth": pd.Timestamp("2008-01-01"),
@@ -40,7 +40,7 @@ new_player = pd.DataFrame([{
     "highest_market_value_in_eur": 999999999,
     "NameJP": "淡路卓",
     "ClubJP": "レアル・マドリード",
-    "Age": 18
+    "Age": 36
 }])
 df = pd.concat([df, new_player], ignore_index=True)
 
