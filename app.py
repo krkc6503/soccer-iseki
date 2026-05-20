@@ -151,18 +151,18 @@ if mode == "実在選手":
         st.subheader("Player Radar Chart")
         st.pyplot(fig)
 
-        # 市場価値トップ10
-        st.subheader("Top 10 Market Value")
+       # 市場価値トップ10
+st.subheader("Top 10 Market Value")
 
-        top10 = df.sort_values("market_value_in_eur", ascending=False).head(10)
+top10 = df.sort_values("market_value_in_eur", ascending=False).head(10)
 
-        fig2, ax2 = plt.subplots(figsize=(10, 5))
-        ax2.barh(top10["NameJP"], top10["market_value_in_eur"] / 1000000)
-        ax2.invert_yaxis()
-        ax2.set_xlabel("Market Value (Million €)")
-        ax2.set_ylabel("Player")
+fig2, ax2 = plt.subplots(figsize=(10, 5))
+ax2.barh(top10["name"], top10["market_value_in_eur"] / 1000000)
+ax2.invert_yaxis()
+ax2.set_xlabel("Market Value (Million €)")
+ax2.set_ylabel("Player")
 
-        st.pyplot(fig2)
+st.pyplot(fig2)
 
 else:
     age = st.slider("年齢", 16, 40, 22)
