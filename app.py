@@ -74,6 +74,8 @@ new_player = pd.DataFrame([{
 
 df = pd.concat([df, new_player], ignore_index=True)
 
+df = pd.concat([df, new_player], ignore_index=True)
+
 # ポジション数値化
 position_map = {
     "Goalkeeper": 1,
