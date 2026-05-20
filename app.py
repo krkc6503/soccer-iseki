@@ -67,7 +67,8 @@ new_player = pd.DataFrame([{
 df = pd.concat([df, new_player], ignore_index=True)
 
 # 年齢計算
-df["date_of_birth"] = pd.to_datetime(df["date_of_birth"])
+df["date_of_birth"] = pd.to_datetime(df["date_of_birth"], errors="coerce")
+df = df.dropna(subset=["date_of_birth"])
 df["Age"] = 2026 - df["date_of_birth"].dt.year
 
 # ポジション数値化
