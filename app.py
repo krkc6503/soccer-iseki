@@ -1,3 +1,4 @@
+%%writefile app.py
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -77,8 +78,15 @@ if mode == "実在選手":
     club = st.selectbox("クラブ", sorted(df["ClubJP"].unique()))
     club_df = df[df["ClubJP"] == club]
 
-    player = st.selectbox("選手", club_df["NameJP"])
-    selected = club_df[club_df["NameJP"] == player].iloc[0]
+   search_name = st.text_input("選手名を入力（日本語・英語どちらでもOK）")
+
+filtered_players = club_df[
+    club_df["NameJP"].str.contains(search_name, case=False, na=False) |
+    club_df["name"].str.contains(search_name, case=False, na=False)
+]
+
+player = st.selectbox("選手を選択", filtered_players["NameJP"])
+selected = filtered_players[filtered_players["NameJP"] == player].iloc[0]
 
     st.subheader("選手データ")
     st.dataframe(selected.to_frame().T)
