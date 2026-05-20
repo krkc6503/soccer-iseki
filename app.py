@@ -40,7 +40,7 @@ new_player = pd.DataFrame([{
     "highest_market_value_in_eur": 999999999,
     "NameJP": "淡路卓",
     "ClubJP": "レアル・マドリード",
-    "Age": 36
+    "Age": 36,
     "PositionNum": 4,
 }])
 
