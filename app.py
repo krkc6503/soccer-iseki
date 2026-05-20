@@ -148,21 +148,21 @@ if mode == "実在選手":
         ax.set_xticklabels(labels, fontsize=11)
         ax.set_ylim(0, 100)
 
-        st.subheader("Player Radar Chart")
+               st.subheader("Player Radar Chart")
         st.pyplot(fig)
 
-       # 市場価値トップ10
-st.subheader("Top 10 Market Value")
+        # 市場価値トップ10（英語表記）
+        st.subheader("Top 10 Market Value")
 
-top10 = df.sort_values("market_value_in_eur", ascending=False).head(10)
+        top10 = df.sort_values("market_value_in_eur", ascending=False).head(10)
 
-fig2, ax2 = plt.subplots(figsize=(10, 5))
-ax2.barh(top10["name"], top10["market_value_in_eur"] / 1000000)
-ax2.invert_yaxis()
-ax2.set_xlabel("Market Value (Million €)")
-ax2.set_ylabel("Player")
+        fig2, ax2 = plt.subplots(figsize=(10, 5))
+        ax2.barh(top10["name"], top10["market_value_in_eur"] / 1000000)
+        ax2.invert_yaxis()
+        ax2.set_xlabel("Market Value (Million €)")
+        ax2.set_ylabel("Player")
 
-st.pyplot(fig2)
+        st.pyplot(fig2)
 
 else:
     age = st.slider("年齢", 16, 40, 22)
@@ -173,3 +173,4 @@ else:
         pred = model.predict([[age, pos_num]])
         st.subheader("予測市場価値")
         st.write(f"{pred[0]:,.0f} €")
+
