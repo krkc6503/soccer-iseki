@@ -41,7 +41,9 @@ player_jp = {
     "Mohamed Salah": "モハメド・サラー",
     "Vinicius Junior": "ヴィニシウス・ジュニオール",
     "Kevin De Bruyne": "ケヴィン・デ・ブライネ",
-    "Harry Kane": "ハリー・ケイン"
+    "Harry Kane": "ハリー・ケイン",
+    "Lionel Messi": "リオネル・メッシ",
+    "Cristiano Ronaldo": "クリスティアーノ・ロナウド"
 }
 
 df["ClubJP"] = df["current_club_name"].replace(club_jp)
@@ -74,21 +76,20 @@ model.fit(X, y)
 mode = st.radio("選択", ["実在選手", "自分で入力"])
 
 if mode == "実在選手":
-    club = st.selectbox("クラブ", sorted(df["ClubJP"].unique()))
-    club_df = df[df["ClubJP"] == club]
-
     search_name = st.text_input("選手名を入力（日本語・英語どちらでもOK）")
 
-    filtered_players = club_df[
-        club_df["NameJP"].str.contains(search_name, case=False, na=False) |
-        club_df["name"].str.contains(search_name, case=False, na=False)
+    filtered_players = df[
+        df["NameJP"].str.contains(search_name, case=False, na=False) |
+        df["name"].str.contains(search_name, case=False, na=False)
     ]
 
     if len(filtered_players) == 0:
         st.warning("該当する選手がいません")
     else:
-        player = st.selectbox("選手を選択", filtered_players["NameJP"])
-        selected = filtered_players[filtered_players["NameJP"] == player].iloc[0]
+        display_names = filtered_players["NameJP"] + "（" + filtered_players["ClubJP"] + "）"
+        player_display = st.selectbox("選手を選択", display_names)
+
+        selected = filtered_players.iloc[display_names.tolist().index(player_display)]
 
         st.subheader("選手データ")
         st.dataframe(selected.to_frame().T)
