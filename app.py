@@ -2,15 +2,14 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import kagglehub
-import os
 from sklearn.linear_model import LinearRegression
 
 st.title("⚽ サッカー選手 実市場価値予測AI")
 
 # データ取得
-path = kagglehub.dataset_download("davidcariboo/player-scores")
-df = pd.read_csv(os.path.join(path, "players.csv"))
+df = pd.read_csv(
+    "https://raw.githubusercontent.com/krkc6503/soccer-iseki/main/players.csv"
+)
 
 # 必要列だけ
 df = df[
