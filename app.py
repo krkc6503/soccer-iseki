@@ -8,8 +8,7 @@ st.title("⚽ サッカー選手 実市場価値予測AI")
 
 # データ取得
 df = pd.read_csv(
-    "https://raw.githubusercontent.com/krkc6503/soccer-iseki/main/players.csv"
-)
+    "https://raw.githubusercontent.com/krkc6503/soccer-iseki/refs/heads/main/player_data.csv")
 
 # 必要列だけ
 df = df[
